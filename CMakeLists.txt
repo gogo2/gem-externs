@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.00)
 project(gem_externs)
 
-set(CMAKE_CXX_STANDARD 14)
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -pedantic -Wall -static-libstdc++ ")
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
@@ -20,10 +18,10 @@ endif ()
 #find_library(PD_LIB pd HINTS)
 
 # PD and NDI libraries configuration BEGIN
-set(PD_LIB_DIR ${PROJECT_SOURCE_DIR}/../_lib/lib)
-set(PD_LIB_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/../_lib/include)
-set(GEM_LIB_DIR ${PROJECT_SOURCE_DIR}/../_lib/lib)
-set(GEM_LIB_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/../_lib/include/Gem)
+set(PD_LIB_DIR ${PROJECT_SOURCE_DIR}/../../_lib/lib)
+set(PD_LIB_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/../../_lib/include)
+set(GEM_LIB_DIR ${PROJECT_SOURCE_DIR}/../../_lib/lib)
+set(GEM_LIB_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/../../_lib/include/Gem)
 # END PD and NDI libraries configuration
 
 
@@ -33,4 +31,4 @@ include_directories(${GEM_LIB_INCLUDE_DIR})
 link_directories(${GEM_LIB_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/lib/)
 
-add_subdirectory(src)
+add_subdirectory(pix_multiblob2)
