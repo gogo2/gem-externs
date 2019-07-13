@@ -255,7 +255,7 @@ void pix_multiblob2::blobMinSizeMess(t_float blobMinSize) {
         return;
     }
     m_blobminsize = blobMinSize / 100.0;
-    post("blobminsize:%f", m_blobminsize);
+    post("blobMinSize: %f", m_blobminsize);
     blobSizeWarning();
 }
 
@@ -268,7 +268,7 @@ void pix_multiblob2::blobMaxSizeMess(t_float blobMaxSize) {
         return;
     }
     m_blobmaxsize = blobMaxSize / 100.0;
-    post("blobmaxsize:%f", m_blobmaxsize);
+    post("blobMaxSize: %f", m_blobmaxsize);
     blobSizeWarning();
 }
 
@@ -289,6 +289,7 @@ void pix_multiblob2::threshMess(t_float thresh) {
         error("threshold %f out of range (0..1)!", thresh);
     }
     m_threshold = CLAMP(thresh * 255);
+    post("threshold: %d", m_threshold);
 }
 
 /*------------------------------------------------------------
