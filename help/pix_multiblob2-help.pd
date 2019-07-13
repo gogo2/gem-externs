@@ -1,0 +1,226 @@
+#N canvas 372 235 816 540 10;
+#X declare -lib Gem;
+#X text 452 8 GEM object;
+#X obj 9 323 cnv 15 430 185 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X text 40 325 Inlets:;
+#X text 39 443 Outlets:;
+#X obj 9 286 cnv 15 430 30 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#X text 18 284 Arguments:;
+#X text 453 39 Example:;
+#X text 17 457 Outlet 1: gemlist;
+#X text 24 339 Inlet 1: gemlist;
+#X text 71 31 Class: pix object (analysis);
+#X text 24 354 Inlet 1: threshold <float>: minimum luminance of a pixel
+to be considered part of a blob. (default:0.04);
+#X text 64 295 int: max number N of blobs to detect;
+#X text 12 513 for motion-tracking you will also need;
+#X obj 304 512 pix_movement;
+#X obj 9 56 cnv 15 430 223 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X text 31 53 Description: blob detector (for multiple blobs);
+#X text 18 98 a "blob" is a number of adjacent(!) pixels with a luminance
+that is bigger than the value defined by "threshold". you can set the
+minimum size of a blob that is needed to be detected.;
+#X obj 450 53 cnv 15 320 450 empty empty empty 20 12 0 14 -228992 -66577
+0;
+#X obj 453 356 cnv 15 100 60 empty empty empty 20 12 0 14 -195568 -66577
+0;
+#N canvas 0 22 450 300 gemwin 0;
+#X obj 132 136 gemwin;
+#X obj 67 89 outlet;
+#X obj 67 10 inlet;
+#X msg 67 70 set destroy;
+#X msg 132 112 create \, 1;
+#X msg 198 112 destroy;
+#X msg 156 71 set create;
+#X obj 67 41 route create;
+#X connect 2 0 7 0;
+#X connect 3 0 1 0;
+#X connect 4 0 0 0;
+#X connect 5 0 0 0;
+#X connect 6 0 1 0;
+#X connect 7 0 3 0;
+#X connect 7 0 4 0;
+#X connect 7 1 6 0;
+#X connect 7 1 5 0;
+#X restore 461 395 pd gemwin;
+#X msg 461 376 create;
+#X text 457 355 Create window:;
+#X obj 453 152 cnv 15 300 120 empty empty empty 20 12 0 14 -24198 -66577
+0;
+#X obj 457 58 gemhead;
+#X obj 457 279 pix_texture;
+#X obj 457 130 pix_film;
+#X obj 521 130 t f;
+#X obj 470 82 bng 25 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+-1;
+#N canvas 0 22 450 300 open 0;
+#X obj 85 49 inlet;
+#X obj 85 237 outlet;
+#X obj 85 145 openpanel;
+#X msg 85 179 open \$1;
+#X msg 259 213 auto 1;
+#X obj 259 189 loadbang;
+#X connect 0 0 2 0;
+#X connect 2 0 3 0;
+#X connect 3 0 1 0;
+#X connect 4 0 1 0;
+#X connect 5 0 4 0;
+#X restore 470 110 pd open;
+#X text 511 56 open a supported;
+#X text 512 67 movie-clip;
+#X text 529 93 macOS: quicktime;
+#X text 522 83 MS Windows: *.AVI;
+#X text 529 103 linux: depends...;
+#X floatatom 469 169 3 0 100 2 threshold - -;
+#X obj 469 186 / 100;
+#X obj 457 301 square 4;
+#X msg 469 207 threshold \$1;
+#X floatatom 559 169 3 0 100 2 blobMinSize - -;
+#X obj 559 186 / 100;
+#X floatatom 569 305 5 0 0 1 x - -;
+#X floatatom 570 321 5 0 0 1 y - -;
+#X floatatom 570 337 5 0 0 1 size - -;
+#X floatatom 571 353 5 0 0 1 minX - -;
+#X floatatom 571 369 5 0 0 1 minY - -;
+#X floatatom 572 385 5 0 0 1 maxX - -;
+#X floatatom 572 401 5 0 0 1 maxY - -;
+#X floatatom 573 417 5 0 0 1 area - -;
+#N canvas 279 450 687 354 showblob 0;
+#X obj 67 86 inlet blobinformation;
+#X obj 67 167 outlet weightedX;
+#X obj 88 187 outlet weightedY;
+#X obj 109 207 outlet weightedSize;
+#X obj 128 228 outlet minX;
+#X obj 149 248 outlet minY;
+#X obj 215 228 outlet maxX;
+#X obj 232 248 outlet maxY;
+#X obj 305 228 outlet size;
+#X text 60 45 this extracts information of the 1st detected blob;
+#N canvas 517 405 450 300 rectangle 0;
+#X obj 68 75 inlet;
+#X obj 215 -1 inlet;
+#X obj 68 257 rectangle;
+#X obj 68 234 translateXYZ;
+#X obj 215 69 unpack 0 0 0 0;
+#X obj 215 94 +;
+#X obj 254 95 +;
+#X text 248 125 0..2;
+#X text 250 145 -1..+1;
+#X obj 340 148 -;
+#X obj 377 149 -;
+#X obj 193 124 - 1;
+#X obj 193 147 * 4;
+#X obj 222 123 - 1;
+#X obj 222 146 * 4;
+#X obj 340 180 * -4;
+#X obj 377 180 * -4;
+#X connect 0 0 3 0;
+#X connect 1 0 4 0;
+#X connect 3 0 2 0;
+#X connect 4 0 5 0;
+#X connect 4 0 9 0;
+#X connect 4 1 5 1;
+#X connect 4 1 9 1;
+#X connect 4 2 6 0;
+#X connect 4 2 10 0;
+#X connect 4 3 6 1;
+#X connect 4 3 10 1;
+#X connect 5 0 11 0;
+#X connect 6 0 13 0;
+#X connect 9 0 15 0;
+#X connect 10 0 16 0;
+#X connect 11 0 12 0;
+#X connect 12 0 3 1;
+#X connect 13 0 14 0;
+#X connect 14 0 3 2;
+#X connect 15 0 2 1;
+#X connect 16 0 2 2;
+#X restore 346 188 pd rectangle;
+#X obj 346 117 color 1 1 1 0.5;
+#X obj 346 96 gemhead 70;
+#X obj 346 138 alpha;
+#X msg 425 164 \$6 \$8 \$7 \$9;
+#X msg 67 114 \$3 \$4 \$5 \$6 \$7 \$8 \$9 \$10 \$11;
+#X obj 67 138 unpack 0 0 0 0 0 0 0 0 0;
+#X obj 315 248 outlet angle;
+#X connect 0 0 15 0;
+#X connect 0 0 14 0;
+#X connect 11 0 13 0;
+#X connect 12 0 11 0;
+#X connect 13 0 10 0;
+#X connect 14 0 10 1;
+#X connect 15 0 16 0;
+#X connect 16 0 1 0;
+#X connect 16 1 2 0;
+#X connect 16 2 3 0;
+#X connect 16 3 4 0;
+#X connect 16 4 5 0;
+#X connect 16 5 6 0;
+#X connect 16 6 7 0;
+#X connect 16 7 8 0;
+#X connect 16 8 17 0;
+#X restore 547 280 pd showblob 1;
+#X msg 549 131 auto \$1;
+#X obj 604 133 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
+1;
+#X floatatom 573 433 5 0 0 1 angle* - -;
+#X text 16 478 Outlet 2: (k \, 9) matrix: describing k detected blobs
+(with 0<=k<N);
+#X text 461 464 * angle converted to degrees but is originally in radians
+, f 30;
+#X text 18 154 the output is a matrix following the conventions of
+the mtx-objects from zexy/iemmatrix. each row describes one detected
+blob as follows: centerX(weighted) \, centerY(weighted) \, size(weighted)
+\, minX \, minY \, maxX \, maxY \, size \, angle. "weighted" here means
+each pixel is weighted by its luminance value during the calculation.
+"angle" is the (weighted) orientation of the principal axis of the
+blob in the [-pi/2 \, pi/2] range.;
+#X obj 548 8 declare -lib Gem;
+#X obj 457 241 pix_multiblob2 6;
+#X msg 559 207 blobMinSize \$1;
+#X msg 660 208 blobMaxSize \$1;
+#X floatatom 659 165 3 0 0 2 blobMaxSize - -;
+#X obj 659 185 / 100;
+#X text 50 12 Synopsis: [pix_multiblob2];
+#X text 17 68 [pix_multiblob2] is able to detect multiple blobs within
+an image.;
+#X obj 466 538 cnv 15 100 60 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X text 24 383 Inlet 1: blobMinSize <float>: minimum relative size
+of a blob. (default:0.1);
+#X text 23 412 Inlet 1: blobMaxSize <float>: maximum relative size
+of a blob. (default:1.0);
+#X connect 19 0 20 0;
+#X connect 20 0 19 0;
+#X connect 23 0 25 0;
+#X connect 24 0 36 0;
+#X connect 25 0 56 0;
+#X connect 25 2 26 0;
+#X connect 26 0 25 1;
+#X connect 27 0 28 0;
+#X connect 28 0 25 0;
+#X connect 34 0 35 0;
+#X connect 35 0 37 0;
+#X connect 37 0 56 0;
+#X connect 38 0 39 0;
+#X connect 39 0 57 0;
+#X connect 48 0 40 0;
+#X connect 48 1 41 0;
+#X connect 48 2 42 0;
+#X connect 48 3 43 0;
+#X connect 48 4 44 0;
+#X connect 48 5 45 0;
+#X connect 48 6 46 0;
+#X connect 48 7 47 0;
+#X connect 48 8 51 0;
+#X connect 49 0 25 0;
+#X connect 50 0 49 0;
+#X connect 56 0 24 0;
+#X connect 56 1 48 0;
+#X connect 57 0 56 0;
+#X connect 58 0 56 0;
+#X connect 59 0 60 0;
+#X connect 60 0 58 0;

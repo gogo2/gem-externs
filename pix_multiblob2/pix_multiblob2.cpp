@@ -50,6 +50,7 @@ pix_multiblob2::pix_multiblob2(t_floatarg f) :
         m_blobNumber(0),
         m_currentBlobs(nullptr),
         m_blobminsize(0.001),
+        m_blobmaxsize(0.01),
         m_threshold(10),
         m_infoOut(nullptr) {
     // initialize image
@@ -176,12 +177,12 @@ render
 
 ------------------------------------------------------------*/
 void pix_multiblob2::doProcessing() {
-    int blobNumber = 0;
     int blobminarea = static_cast<int>(m_blobminsize * m_image.xsize * m_image.ysize);
     int blobmaxarea = static_cast<int>(m_blobmaxsize * m_image.xsize * m_image.ysize);
 
     // reset the currentblobs array
     // detect blobs and add them to the currentBlobs-array
+    int blobNumber = 0;
     for (int y = 0; y < m_image.ysize; y++) {
         for (int x = 0; x < m_image.xsize; x++) {
             if (m_image.GetPixel(y, x, 0) > 0) {
@@ -227,8 +228,7 @@ void pix_multiblob2::doProcessing() {
         SETFLOAT(ap + bn * 9 + 8, m_currentBlobs[bn].ymax() * scaleY); // maxY
 
         SETFLOAT(ap + bn * 9 + 9, m_currentBlobs[bn].area * scaleXY);  // unweighted Area
-        SETFLOAT(ap + bn * 9 + 10,
-                 m_currentBlobs[bn].angle());      // weighted orientation
+        SETFLOAT(ap + bn * 9 + 10, m_currentBlobs[bn].angle());      // weighted orientation
     }
 
     // i admit that it is naughty to use "matrix" from zexy/iemmatrix
@@ -255,6 +255,7 @@ void pix_multiblob2::blobMinSizeMess(t_float blobMinSize) {
         return;
     }
     m_blobminsize = blobMinSize / 100.0;
+    post("blobminsize:%f", m_blobminsize);
     blobSizeWarning();
 }
 
@@ -267,6 +268,7 @@ void pix_multiblob2::blobMaxSizeMess(t_float blobMaxSize) {
         return;
     }
     m_blobmaxsize = blobMaxSize / 100.0;
+    post("blobmaxsize:%f", m_blobmaxsize);
     blobSizeWarning();
 }
 
@@ -275,7 +277,7 @@ blobSizeWarning
 ------------------------------------------------------------*/
 void pix_multiblob2::blobSizeWarning() const {
     if (m_blobminsize > m_blobmaxsize) {
-        post("[warning] pix_multiblob2: minimum blob size greater than maximum blob size")
+        post("[warning] pix_multiblob2: minimum blob size greater than maximum blob size");
     }
 }
 
