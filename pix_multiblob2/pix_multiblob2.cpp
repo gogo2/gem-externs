@@ -263,8 +263,8 @@ void pix_multiblob2::blobMinSizeMess(t_float blobMinSize) {
 blobMaxSizeMess
 ------------------------------------------------------------*/
 void pix_multiblob2::blobMaxSizeMess(t_float blobMaxSize) {
-    if ((blobMaxSize < 0.0) || (blobMaxSize > 1.0)) {
-        error("blobMaxSize %f out of range (0..1)!", blobMaxSize);
+    if ((blobMaxSize < 0.0) || (blobMaxSize > 100.0)) {
+        error("blobMaxSize %f out of range (0..100)!", blobMaxSize);
         return;
     }
     m_blobmaxsize = blobMaxSize / 100.0;
@@ -313,7 +313,6 @@ void pix_multiblob2::obj_setupCallback(t_class *classPtr) {
     CPPEXTERN_MSG1(classPtr, "blobMaxSize", blobMaxSizeMess, t_float);
     CPPEXTERN_MSG1(classPtr, "thresh", threshMess, t_float);
     CPPEXTERN_MSG1(classPtr, "threshold", threshMess, t_float);
-    CPPEXTERN_MSG1(classPtr, "blobMaxSize", threshMess, t_float);
 
     CPPEXTERN_MSG1(classPtr, "blobs", numBlobsMess, unsigned int);
 }

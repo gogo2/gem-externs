@@ -1,4 +1,4 @@
-#N canvas 372 235 816 540 10;
+#N canvas 670 264 816 540 10;
 #X declare -lib Gem;
 #X text 452 8 GEM object;
 #X obj 9 323 cnv 15 430 185 empty empty empty 20 12 0 14 -233017 -66577
@@ -181,9 +181,8 @@ blob in the [-pi/2 \, pi/2] range.;
 #X obj 548 8 declare -lib Gem;
 #X obj 457 241 pix_multiblob2 6;
 #X msg 559 207 blobMinSize \$1;
-#X msg 660 208 blobMaxSize \$1;
-#X floatatom 659 165 3 0 0 2 blobMaxSize - -;
-#X obj 659 185 / 100;
+#X msg 659 208 blobMaxSize \$1;
+#X floatatom 659 167 4 0 1000 2 blobMaxSize - -;
 #X text 50 12 Synopsis: [pix_multiblob2];
 #X text 17 68 [pix_multiblob2] is able to detect multiple blobs within
 an image.;
@@ -193,6 +192,7 @@ an image.;
 of a blob. (default:0.1);
 #X text 23 412 Inlet 1: blobMaxSize <float>: maximum relative size
 of a blob. (default:1.0);
+#X obj 659 185 / 10;
 #X connect 19 0 20 0;
 #X connect 20 0 19 0;
 #X connect 23 0 25 0;
@@ -222,5 +222,5 @@ of a blob. (default:1.0);
 #X connect 56 1 48 0;
 #X connect 57 0 56 0;
 #X connect 58 0 56 0;
-#X connect 59 0 60 0;
-#X connect 60 0 58 0;
+#X connect 59 0 65 0;
+#X connect 65 0 58 0;
