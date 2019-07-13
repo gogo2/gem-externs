@@ -49,7 +49,7 @@ initializes the pixBlocks and pixBlobs
 pix_multiblob2::pix_multiblob2(t_floatarg f) :
         m_blobNumber(0),
         m_currentBlobs(nullptr),
-        m_blobsize(0.001),
+        m_blobminsize(0.001),
         m_threshold(10),
         m_infoOut(nullptr) {
     // initialize image
@@ -87,7 +87,7 @@ algorithm adapted from imfill from animal.sf.net
 by Ricardo Fabbri (labmacambira.sf.net)
 ------------------------------------------------------------*/
 void pix_multiblob2::makeBlob(Blob *pb, int x_ini, int y_ini) {
-    if (!pb) {
+    if (pb == nullptr) {
         return;
     }
 
@@ -177,12 +177,10 @@ render
 ------------------------------------------------------------*/
 void pix_multiblob2::doProcessing() {
     int blobNumber = 0;
-    int blobsize = static_cast<int>(m_blobsize * m_image.xsize *
-                                    m_image.ysize);
+    int blobminarea = static_cast<int>(m_blobminsize * m_image.xsize * m_image.ysize);
+    int blobmaxarea = static_cast<int>(m_blobmaxsize * m_image.xsize * m_image.ysize);
 
     // reset the currentblobs array
-
-
     // detect blobs and add them to the currentBlobs-array
     for (int y = 0; y < m_image.ysize; y++) {
         for (int x = 0; x < m_image.xsize; x++) {
@@ -192,9 +190,9 @@ void pix_multiblob2::doProcessing() {
                 blob->ymin(m_image.ysize);
 
                 makeBlob(blob, x, y);
-                if (blob->area > blobsize) {
+                if (blob->area >= blobminarea && blob->area <= blobmaxarea) {
                     addToBlobArray(blob, blobNumber);
-                    blobNumber++;
+                    ++blobNumber;
                 }
                 delete blob;
             }
@@ -249,14 +247,36 @@ void pix_multiblob2::processImage(imageStruct &image) {
 
 
 /*------------------------------------------------------------
-blobSizeMess
+blobMinSizeMess
 ------------------------------------------------------------*/
-void pix_multiblob2::blobSizeMess(t_float blobSize) {
-    if ((blobSize < 0.0) || (blobSize > 1.0)) {
-        error("blobsize %f out of range (0..1)!", blobSize);
+void pix_multiblob2::blobMinSizeMess(t_float blobMinSize) {
+    if ((blobMinSize < 0.0) || (blobMinSize > 1.0)) {
+        error("blobMinSize %f out of range (0..1)!", blobMinSize);
         return;
     }
-    m_blobsize = blobSize / 100.0;
+    m_blobminsize = blobMinSize / 100.0;
+    blobSizeWarning();
+}
+
+/*------------------------------------------------------------
+blobMaxSizeMess
+------------------------------------------------------------*/
+void pix_multiblob2::blobMaxSizeMess(t_float blobMaxSize) {
+    if ((blobMaxSize < 0.0) || (blobMaxSize > 1.0)) {
+        error("blobMaxSize %f out of range (0..1)!", blobMaxSize);
+        return;
+    }
+    m_blobmaxsize = blobMaxSize / 100.0;
+    blobSizeWarning();
+}
+
+/*------------------------------------------------------------
+blobSizeWarning
+------------------------------------------------------------*/
+void pix_multiblob2::blobSizeWarning() const {
+    if (m_blobminsize > m_blobmaxsize) {
+        post("[warning] pix_multiblob2: minimum blob size greater than maximum blob size")
+    }
 }
 
 /*------------------------------------------------------------
@@ -286,9 +306,12 @@ void pix_multiblob2::numBlobsMess(unsigned int blobs) {
 //
 /////////////////////////////////////////////////////////
 void pix_multiblob2::obj_setupCallback(t_class *classPtr) {
-    CPPEXTERN_MSG1(classPtr, "blobSize", blobSizeMess, t_float);
+    CPPEXTERN_MSG1(classPtr, "blobSize", blobMinSizeMess, t_float);
+    CPPEXTERN_MSG1(classPtr, "blobMinSize", blobMinSizeMess, t_float);
+    CPPEXTERN_MSG1(classPtr, "blobMaxSize", blobMaxSizeMess, t_float);
     CPPEXTERN_MSG1(classPtr, "thresh", threshMess, t_float);
     CPPEXTERN_MSG1(classPtr, "threshold", threshMess, t_float);
+    CPPEXTERN_MSG1(classPtr, "blobMaxSize", threshMess, t_float);
 
     CPPEXTERN_MSG1(classPtr, "blobs", numBlobsMess, unsigned int);
 }

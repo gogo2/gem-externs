@@ -99,7 +99,7 @@ public:
 
     //////////
     // Constructor
-    pix_multiblob2(t_float f);
+    explicit pix_multiblob2(t_float f);
 
     //Destructor
     ~pix_multiblob2();
@@ -114,7 +114,9 @@ public:
 
     void numBlobsMess(unsigned int blobs);
 
-    void blobSizeMess(t_float blobSize);
+    void blobMinSizeMess(t_float blobMinSize);
+
+    void blobMaxSizeMess(t_float blobMaxSize);
 
     void threshMess(t_float thresh);
 
@@ -126,13 +128,16 @@ protected:
     Blob *m_currentBlobs;
 
     // the minimum size of a blob (relative to the image)
-    t_float m_blobsize;
+    t_float m_blobminsize;
+    t_float m_blobmaxsize;
 
     // the minimum value of a pixel to be within a blob
     unsigned char m_threshold;
 
     // outlets for results
     t_outlet *m_infoOut;
+
+    void blobSizeWarning() const;
 };
 
 #endif  // for header file
