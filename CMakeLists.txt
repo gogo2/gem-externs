@@ -1,34 +1,23 @@
 cmake_minimum_required(VERSION 3.00)
 project(gem_externs)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -pedantic -Wall -static-libstdc++ ")
-set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 #set(CMAKE_VERBOSE_MAKEFILE on)
 
-if (APPLE)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+if (WIN32)
+    set(PD_INSTALL_DIR_DEFAULT "C:/bin/Pd-0.49-0")
+    set(GEM_EXTERN_DIR_DEFAULT "C:/Users/$ENV{USERNAME}/Documents/Pd/externals/Gem")
+elseif (APPLE)
     set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -undefined dynamic_lookup")
-    set(PD_LIB_NAME)
-    set(GEM_LIB_NAME)
+    set(PD_INSTALL_DIR_DEFAULT "/Applications/Pd-0.49-1.app")
+    set(GEM_EXTERN_DIR_DEFAULT "/Users/$ENV{USER}/Documents/Pd/externals/Gem")
 else ()
-    set(PD_LIB_NAME pd)
-    set(GEM_LIB_NAME Gem)
 endif ()
 
-#find_library(PD_LIB pd HINTS)
+set(PD_INSTALL_DIR ${PD_INSTALL_DIR_DEFAULT} CACHE PATH "Installation direcotry of pd")
+set(GEM_EXTERN_DIR ${GEM_EXTERN_DIR_DEFAULT} CACHE PATH "Directory containing pd Gem")
 
-# PD and NDI libraries configuration BEGIN
-set(PD_LIB_DIR ${PROJECT_SOURCE_DIR}/../../_lib/lib)
-set(PD_LIB_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/../../_lib/include)
-set(GEM_LIB_DIR ${PROJECT_SOURCE_DIR}/../../_lib/lib)
-set(GEM_LIB_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/../../_lib/include/Gem)
-# END PD and NDI libraries configuration
-
-
-include_directories(${PD_LIB_INCLUDE_DIR})
-link_directories(${PD_LIB_DIR})
-include_directories(${GEM_LIB_INCLUDE_DIR})
-link_directories(${GEM_LIB_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/lib/)
 
 add_subdirectory(pix_multiblob2)
