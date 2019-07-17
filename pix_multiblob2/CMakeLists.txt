@@ -9,7 +9,7 @@ set(SRC_FILES
 add_library(pix_multiblob2 SHARED ${SRC_FILES})
 
 find_package(PD REQUIRED)
-find_package(GEM REQUIRED)
+find_package(Gem REQUIRED)
 
 target_compile_options(pix_multiblob2 PRIVATE $<$<CXX_COMPILER_ID:GNU>:-O3 -pedantic -Wall -static-libstdc++>)
 

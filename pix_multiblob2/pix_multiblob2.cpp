@@ -250,8 +250,8 @@ void pix_multiblob2::processImage(imageStruct &image) {
 blobMinSizeMess
 ------------------------------------------------------------*/
 void pix_multiblob2::blobMinSizeMess(t_float blobMinSize) {
-    if ((blobMinSize < 0.0) || (blobMinSize > 1.0)) {
-        error("blobMinSize %f out of range (0..1)!", blobMinSize);
+    if ((blobMinSize < 0.0) || (blobMinSize > 100.0)) {
+        error("blobMinSize %f out of range (0..100)!", blobMinSize);
         return;
     }
     m_blobminsize = blobMinSize / 100.0;
